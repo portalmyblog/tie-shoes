@@ -1,0 +1,30 @@
+Folder PATH listing for volume HDD LAPTOP
+Volume serial number is CA0F-A4F2
+D:.
+¦   struktur.txt
+¦   
++---app
+¦   ¦   actions.js
+¦   ¦   favicon.ico
+¦   ¦   globals.css
+¦   ¦   layout.js
+¦   ¦   page.js
+¦   ¦   
+¦   +---admin
+¦   ¦       actions.js
+¦   ¦       page.js
+¦   ¦       
+¦   +---article
+¦       ¦   page.js
+¦       ¦   
+¦       +---[slug]
+¦               page.js
+¦               
++---components
+¦       Navbar.js
+¦       ScrollToTop.js
+¦       
++---lib
+        data.js
+        settings.js
+        
