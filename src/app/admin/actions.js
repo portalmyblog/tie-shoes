@@ -12,6 +12,7 @@ export async function saveSettings(formData) {
     logoText: formData.get('logoText'),
     title: formData.get('title'),
     description: formData.get('description'),
+    site_url: formData.get('site_url') || '',
     headerScript: formData.get('headerScript') || '',
     footerScript: formData.get('footerScript') || '',
     sidebarScript: formData.get('sidebarScript') || '',
@@ -23,6 +24,8 @@ export async function saveSettings(formData) {
   
   // Minta Next.js untuk memperbarui tampilan di semua halaman seketika
   revalidatePath('/', 'layout');
+  revalidatePath('/sitemap.xml');
+  revalidatePath('/robots.txt');
 }
 
 export async function loginAdmin(formData) {

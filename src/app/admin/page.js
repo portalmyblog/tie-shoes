@@ -74,6 +74,14 @@ export default async function AdminPage({ searchParams }) {
           <textarea id="description" name="description" rows="3" defaultValue={settings.description} required
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
         </div>
+
+        <div>
+          <label htmlFor="site_url" className="block text-sm font-semibold text-gray-700 mb-2">
+            URL Situs Utama (untuk sitemap.xml & robots.txt)
+          </label>
+          <input type="url" id="site_url" name="site_url" defaultValue={settings.site_url || ''} required
+                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" />
+        </div>
         
         {/* BAGIAN SCRIPT DAN IKLAN */}
         <div className="pt-8 border-t mt-8">

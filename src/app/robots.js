@@ -1,11 +1,9 @@
 // app/robots.ts
-import { MetadataRoute } from 'next';
-// Contoh fungsi untuk mengambil data dari database Anda
-import { getSiteSettings } from '@/lib/db'; 
+import { getSettings } from '../lib/settings';
 
-export default async function robots(): Promise<MetadataRoute.Robots> {
+export default async function robots() {
   // Ambil pengaturan URL dari database
-  const settings = await getSiteSettings(); 
+  const settings = getSettings(); 
   
   // Gunakan fallback URL jika admin belum mensettingnya
   const baseUrl = settings?.site_url || 'https://domain-sementara.com';
