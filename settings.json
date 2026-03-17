@@ -4,7 +4,7 @@
   "description": "Medokan sawah timur",
   "site_url": "https://tie-shoes.vercel.app",
   "headerScript": "",
-  "footerScript": "",
+  "footerScript": "<!-- Default Statcounter code for\r\nhttps://tie-shoes.vercel.app/ https://tie-shoes.vercel.app/\r\n-->\r\n<script type=\"text/javascript\">\r\nvar sc_project=13211139; \r\nvar sc_invisible=1; \r\nvar sc_security=\"f1164d26\"; \r\n</script>\r\n<script type=\"text/javascript\"\r\nsrc=\"https://www.statcounter.com/counter/counter.js\"\r\nasync></script>\r\n<noscript><div class=\"statcounter\"><a title=\"website\r\nstatistics\" href=\"https://statcounter.com/\"\r\ntarget=\"_blank\"><img class=\"statcounter\"\r\nsrc=\"https://c.statcounter.com/13211139/0/f1164d26/1/\"\r\nalt=\"website statistics\"\r\nreferrerPolicy=\"no-referrer-when-downgrade\"></a></div></noscript>\r\n<!-- End of Statcounter Code -->",
   "sidebarScript": "",
   "articleScript": ""
 }
