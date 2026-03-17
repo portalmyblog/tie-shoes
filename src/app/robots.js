@@ -1,13 +1,22 @@
-export default function robots() {
-  // Ganti URL ini dengan domain asli Anda saat sudah di-hosting (contoh: https://blogmodern.com)
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+// app/robots.ts
+import { MetadataRoute } from 'next';
+// Contoh fungsi untuk mengambil data dari database Anda
+import { getSiteSettings } from '@/lib/db'; 
+
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  // Ambil pengaturan URL dari database
+  const settings = await getSiteSettings(); 
+  
+  // Gunakan fallback URL jika admin belum mensettingnya
+  const baseUrl = settings?.site_url || 'https://domain-sementara.com';
 
   return {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: '/admin/', // Cegah Google mengindeks halaman admin
+      disallow: '/admin/', // Sembunyikan halaman admin dari mesin pencari
     },
+    // Masukkan baseUrl yang didapat dari database
     sitemap: `${baseUrl}/sitemap.xml`,
-  }
+  };
 }
