@@ -2,6 +2,46 @@ import { getArticleBySlug } from '../../../lib/data';
 import Link from 'next/link';
 import { getSettings } from '../../../lib/settings';
 
+export async function generateMetadata({ params }) {
+  const resolvedParams = await params;
+  const { slug } = resolvedParams;
+  const article = getArticleBySlug(slug);
+
+  if (!article) {
+    return {
+      title: 'Artikel Tidak Ditemukan',
+      description: 'Halaman artikel yang Anda cari tidak tersedia.'
+    };
+  }
+
+  let description = `Baca informasi lengkap dan artikel terkait ${article.keyword}.`;
+  if (article.web_results && article.web_results.length > 0 && article.web_results[0].snippet) {
+    // Potong deskripsi maksimal ~155 karakter agar optimal di mesin pencari
+    description = article.web_results[0].snippet.substring(0, 155) + '...';
+  }
+
+  const title = article.keyword.replace(/\b\w/g, char => char.toUpperCase());
+  const images = article.image_urls && article.image_urls.length > 0 ? [article.image_urls[0]] : [];
+
+  return {
+    title: title,
+    description,
+    keywords: [article.keyword, article.category, 'artikel'],
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      images,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images,
+    }
+  };
+}
+
 export default async function ArticlePage({ params }) {
   const resolvedParams = await params;
   const { slug } = resolvedParams;
@@ -29,8 +69,21 @@ export default async function ArticlePage({ params }) {
     contentHtml = shuffledResults.map(item => `<p>${item.snippet}</p>`).join('');
   }
 
+  // Schema.org JSON-LD untuk optimasi SEO (Structured Data)
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.keyword.replace(/\b\w/g, char => char.toUpperCase()),
+    image: article.image_urls || [],
+    articleSection: article.category || 'Uncategorized',
+    description: article.web_results && article.web_results.length > 0 
+      ? article.web_results[0].snippet 
+      : `Artikel mengenai ${article.keyword}`
+  };
+
   return (
     <main className="max-w-5xl mx-auto p-8 font-sans">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="flex flex-col lg:flex-row gap-12">
         <div className={`flex-1 ${settings.sidebarScript ? 'lg:w-3/4' : 'w-full'}`}>
           <Link href="/" className="inline-block text-blue-600 font-medium hover:underline mb-8">
