@@ -136,17 +136,27 @@ export default async function AdminPage({ searchParams }) {
         <div className="bg-indigo-50 p-6 rounded-lg border border-indigo-100 flex flex-col">
           <h3 className="text-lg font-semibold text-indigo-900 mb-2">Export ke WordPress (WXR)</h3>
           <p className="text-sm text-indigo-700 mb-4 flex-1">Download seluruh artikel Anda dalam format file XML yang siap dan bisa langsung di-import (Tools &rarr; Import) ke dashboard WordPress.</p>
-          <a href="/api/export-wordpress" download="wordpress-export.xml" className="inline-block text-center w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">
-            Download WordPress XML
-          </a>
+          <div className="flex flex-col gap-3 mt-auto">
+            <a href="/api/export-wordpress" download="wordpress-export.xml" className="inline-block text-center w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">
+              Export Langsung (Publish)
+            </a>
+            <a href="/api/export-wordpress?schedule=true" download="wordpress-scheduled.xml" className="inline-block text-center w-full bg-white text-indigo-700 font-bold py-2 px-4 rounded-lg border border-indigo-200 hover:bg-indigo-50 transition-colors shadow-sm">
+              Export Terjadwal (1 per Hari)
+            </a>
+          </div>
         </div>
 
         <div className="bg-orange-50 p-6 rounded-lg border border-orange-100 flex flex-col">
           <h3 className="text-lg font-semibold text-orange-900 mb-2">Export ke Blogspot (Blogger)</h3>
           <p className="text-sm text-orange-700 mb-4 flex-1">Download artikel dalam format Atom XML yang siap di-import (Setelan &rarr; Kelola Blog &rarr; Impor konten) ke dashboard Blogspot Anda.</p>
-          <a href="/api/export-blogspot" download="blogspot-export.xml" className="inline-block text-center w-full bg-orange-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-orange-700 transition-colors shadow-sm">
-            Download Blogspot XML
-          </a>
+          <div className="flex flex-col gap-3 mt-auto">
+            <a href="/api/export-blogspot" download="blogspot-export.xml" className="inline-block text-center w-full bg-orange-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors shadow-sm">
+              Export Langsung (Live)
+            </a>
+            <a href="/api/export-blogspot?schedule=true" download="blogspot-scheduled.xml" className="inline-block text-center w-full bg-white text-orange-700 font-bold py-2 px-4 rounded-lg border border-orange-200 hover:bg-orange-50 transition-colors shadow-sm">
+              Export Terjadwal (1 per Hari)
+            </a>
+          </div>
         </div>
       </div>
     </main>

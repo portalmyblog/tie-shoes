@@ -15,7 +15,9 @@ function escapeXml(unsafe) {
   });
 }
 
-export async function GET() {
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const isScheduled = searchParams.get('schedule') === 'true';
   const dataPath = path.join(process.cwd(), 'duckduckgo_results.jsonl');
   const settings = getSettings();
   
@@ -78,16 +80,19 @@ export async function GET() {
       category = 'Outdoor';
     }
 
-    // Buat tanggal publikasi secara berurutan mundur
-    const postDateObj = new Date(Date.now() - index * 86400000); 
+    // Jika schedule=true, tanggal maju (+1 hari/artikel). Jika tidak, mundur (-1 hari/artikel).
+    const postDateObj = isScheduled 
+      ? new Date(Date.now() + index * 86400000) 
+      : new Date(Date.now() - index * 86400000); 
     const pubDate = postDateObj.toISOString();
     // Gunakan String untuk mencegah Javascript Number Limit (Pembulatan)
     const postId = "10000000000000" + index;
+    const postStatus = isScheduled ? 'SCHEDULED' : 'LIVE';
 
     xml += `  <entry>
     <id>tag:blogger.com,1999:blog-${blogId}.post-${postId}</id>
     <blogger:type>POST</blogger:type>
-    <blogger:status>LIVE</blogger:status>
+    <blogger:status>${postStatus}</blogger:status>
     <author>
       <name>Admin</name>
       <blogger:type>BLOGGER</blogger:type>

@@ -2,7 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { getSettings } from '../../../lib/settings';
 
-export async function GET() {
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const isScheduled = searchParams.get('schedule') === 'true';
   const dataPath = path.join(process.cwd(), 'duckduckgo_results.jsonl');
   const settings = getSettings();
   
@@ -84,8 +86,10 @@ ${imagesHtml}
       category = 'Outdoor';
     }
 
-    // Buat tanggal mundur agar postingan tidak di tanggal/detik yang sama
-    const postDateObj = new Date(Date.now() - index * 86400000); 
+    // Jika schedule=true, tanggal maju (+1 hari/artikel). Jika tidak, mundur (-1 hari/artikel).
+    const postDateObj = isScheduled 
+      ? new Date(Date.now() + index * 86400000) 
+      : new Date(Date.now() - index * 86400000); 
     const pubDate = postDateObj.toUTCString();
     const postDate = postDateObj.toISOString().slice(0, 19).replace('T', ' '); // Format: YYYY-MM-DD HH:MM:SS
 
@@ -93,6 +97,7 @@ ${imagesHtml}
     const attachmentId = index + 2000;
     const hasFeaturedImage = article.image_urls && article.image_urls.length > 0;
     const featuredImageUrl = hasFeaturedImage ? article.image_urls[0] : '';
+    const postStatus = isScheduled ? 'future' : 'publish';
 
     xml += `
 	<item>
@@ -110,7 +115,7 @@ ${imagesHtml}
 		<wp:comment_status><![CDATA[open]]></wp:comment_status>
 		<wp:ping_status><![CDATA[open]]></wp:ping_status>
 		<wp:post_name><![CDATA[${slug}]]></wp:post_name>
-		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:status><![CDATA[${postStatus}]]></wp:status>
 		<wp:post_parent>0</wp:post_parent>
 		<wp:menu_order>0</wp:menu_order>
 		<wp:post_type><![CDATA[post]]></wp:post_type>
