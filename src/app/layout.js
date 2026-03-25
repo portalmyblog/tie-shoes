@@ -19,11 +19,30 @@ export async function generateMetadata() {
     }
   }
 
+  const baseUrl = settings.site_url || 'https://domain-sementara.com';
+
   return {
-    title: settings.title,
+    metadataBase: new URL(baseUrl),
+    title: {
+      default: settings.title,
+      template: `%s | ${settings.title}`
+    },
     description: settings.description,
     verification: {
       google: googleVerification,
+    },
+    openGraph: {
+      title: settings.title,
+      description: settings.description,
+      url: baseUrl,
+      siteName: settings.title,
+      locale: 'id_ID',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: settings.title,
+      description: settings.description,
     }
   };
 }

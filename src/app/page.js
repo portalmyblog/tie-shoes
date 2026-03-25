@@ -2,6 +2,61 @@ import { getArticles } from '../lib/data';
 import Link from 'next/link';
 import { getSettings } from '../lib/settings';
 
+export async function generateMetadata({ searchParams }) {
+  const params = await searchParams;
+  const settings = getSettings();
+  const baseUrl = settings?.site_url || 'https://domain-sementara.com';
+
+  const isSearch = !!params?.search;
+  const page = parseInt(params?.page) || 1;
+  const category = params?.category || '';
+
+  // Mencegah Search Engine mengindex URL hasil pencarian
+  if (isSearch) {
+    return {
+      title: `Hasil Pencarian: ${params.search}`,
+      robots: {
+        index: false,
+        follow: true,
+      }
+    };
+  }
+
+  let title = settings.title;
+  let description = settings.description;
+
+  if (category && category !== 'Semua') {
+    title = `Kategori: ${category}`;
+    description = `Kumpulan artikel terbaik untuk kategori ${category} di ${settings.title}.`;
+  }
+
+  if (page > 1) {
+    title = `${title === settings.title ? 'Halaman Utama' : title} - Halaman ${page}`;
+  }
+
+  // Menyusun Canonical URL yang bersih
+  const isDefaultHome = !category && page === 1;
+  let queryParams = new URLSearchParams();
+  if (category && category !== 'Semua') queryParams.append('category', category);
+  if (page > 1) queryParams.append('page', page.toString());
+  
+  const queryString = queryParams.toString();
+  const currentUrl = queryString ? `${baseUrl}/?${queryString}` : baseUrl;
+
+  return {
+    title: isDefaultHome ? settings.title : title,
+    description,
+    alternates: {
+      canonical: currentUrl,
+    },
+    openGraph: {
+      title: isDefaultHome ? settings.title : title,
+      description,
+      url: currentUrl,
+    }
+  };
+}
+
 export default async function Home({ searchParams }) {
   const articles = getArticles();
   const settings = getSettings();
@@ -37,6 +92,23 @@ export default async function Home({ searchParams }) {
 
   return (
     <main className="max-w-5xl mx-auto p-8 font-sans">
+      {/* Schema Structured Data (JSON-LD) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": settings.title,
+            "url": settings?.site_url || 'https://domain-sementara.com',
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": `${settings?.site_url || 'https://domain-sementara.com'}/?search={search_term_string}`,
+              "query-input": "required name=search_term_string"
+            }
+          })
+        }}
+      />
       <div className="mb-12 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">{settings.title}</h1>
         <p className="text-lg text-gray-600">{settings.description}</p>

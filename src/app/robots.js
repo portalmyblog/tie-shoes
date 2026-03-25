@@ -12,7 +12,7 @@ export default async function robots() {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: '/admin/', // Sembunyikan halaman admin dari mesin pencari
+      disallow: ['/admin/', '/*?search='], // Sembunyikan halaman admin dan hasil pencarian dari mesin pencari
     },
     // Masukkan baseUrl yang didapat dari database
     sitemap: `${baseUrl}/sitemap.xml`,
